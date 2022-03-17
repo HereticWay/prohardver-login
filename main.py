@@ -15,7 +15,6 @@ LOGIN_URL = 'https://prohardver.hu/muvelet/hozzaferes/belepes.php?url=%2Findex.h
 PROTECTED_PAGE_URL = 'https://prohardver.hu/tema/bestbuy_topik_akcio_ajanlasakor_akcio_hashtag_kote/friss.html'
 
 
-
 def get_fidentifier(session: requests.Session) -> str:
     r = session.get(LOGIN_URL)
 
@@ -44,6 +43,7 @@ def login(session: requests.Session, fidentifier: str, email: str, password: str
         'Sec-GPC': '1',
         'TE': 'trailers'
     })
+
     requests.utils.add_dict_to_cookiejar(session.cookies, {
         'login-options': '{"stay":false,"no_ip_check":false,"leave_others":false}'
     })
@@ -63,12 +63,14 @@ def login(session: requests.Session, fidentifier: str, email: str, password: str
     )
     login_request.prepare_content_length(login_request.body)
 
-    print(f'Headers: {login_request.headers}')
-    print(f'Body: {login_request.body}')
+    logging.info('This data will be sent:')
+    logging.info(f'Headers: {login_request.headers}')
+    logging.info(f'Body: {login_request.body}')
 
     response: requests.Response = session.send(login_request)
-    print(response.content)
-    print(response.headers)
+    logging.info('Response got:')
+    logging.info(response.content)
+    logging.info(response.headers)
 
 
 def request_protected_page(session: requests.Session) -> str:
@@ -77,16 +79,19 @@ def request_protected_page(session: requests.Session) -> str:
 
 
 def main() -> None:
+    logging.basicConfig(level=logging.INFO)
+
     with requests.Session() as session:
         fidentifier = get_fidentifier(session)
-        print(session.cookies)
+        logging.info(f'Cookies of the session right now: {session.cookies}')
 
         time.sleep(0.1)
         login(session, fidentifier, EMAIL, PASSWORD)
 
         time.sleep(0.1)
         page_str = request_protected_page(session)
-        print(page_str)
+        logging.info(f'Protected webpage:')
+        logging.info(page_str)
 
 
 if __name__ == '__main__':
