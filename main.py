@@ -6,10 +6,13 @@ import logging
 import prohardver
 
 PROTECTED_PAGE_URL = 'https://prohardver.hu/tema/bestbuy_topik_akcio_ajanlasakor_akcio_hashtag_kote/friss.html'
+HTTP_REQUEST_TIMEOUT = 5000
 
 
 def request_protected_page(session: requests.Session) -> str:
-    response = session.get(PROTECTED_PAGE_URL)
+    response = session.get(PROTECTED_PAGE_URL, timeout=HTTP_REQUEST_TIMEOUT)
+    response.raise_for_status()  # Raise exception if any HTTPError occurs
+
     return response.text
 
 
