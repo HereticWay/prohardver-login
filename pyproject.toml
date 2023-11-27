@@ -5,3 +5,7 @@ version = "1.0.0"
 dependencies = [
     "requests"
 ]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
