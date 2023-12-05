@@ -54,7 +54,7 @@ class LoginManager:
         })
 
         requests.utils.add_dict_to_cookiejar(self.__session.cookies, {
-            'login-options': '{"stay":false,"no_ip_check":false,"leave_others":false}'
+            'login-options': '{"stay":true,"no_ip_check":true,"leave_others":false}'
         })
 
         login_request = self.__session.prepare_request(request)
